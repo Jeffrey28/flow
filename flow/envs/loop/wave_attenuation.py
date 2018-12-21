@@ -12,6 +12,7 @@ from flow.core.params import InitialConfig
 from flow.core.params import NetParams
 from flow.envs.base_env import Env
 from flow.envs.multiagent_env import MultiEnv
+from flow.core import rewards
 
 from gym.spaces.box import Box
 
@@ -340,22 +341,8 @@ class MultiWaveAttenuationPOEnv(MultiEnv):
         for rl_id in rl_actions.keys():
             edge_id = rl_id.split('_')[1]
             edges = self.gen_edges(edge_id)
-            vehs_on_edge = self.vehicles.get_ids_by_edge(edges)
-            vel = np.array([
-                self.vehicles.get_speed(veh_id)
-                for veh_id in vehs_on_edge
-            ])
-            if any(vel < -100) or kwargs['fail']:
-                return 0.
-
-            target_vel = self.env_params.additional_params['target_velocity']
-            max_cost = np.array([target_vel] * len(vehs_on_edge))
-            max_cost = np.linalg.norm(max_cost)
-
-            cost = vel - target_vel
-            cost = np.linalg.norm(cost)
-
-            rew[rl_id] = max(max_cost - cost, 0) / max_cost
+            rew[rl_id] = rewards.desired_velocity(
+                self, kwargs['fail'], edge_list=edges)
         return rew
 
     def additional_command(self):
