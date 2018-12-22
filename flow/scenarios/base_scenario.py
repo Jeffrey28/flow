@@ -1130,7 +1130,6 @@ class Scenario(Serializable):
 
         cfg.append(
             self._inputs(
-                self.name,
                 net=self.netfn,
                 add=self.addfn,
                 rou=self.roufn,
@@ -1347,28 +1346,12 @@ class Scenario(Serializable):
             departPos=departPos,
             **kwargs)
 
-    def _inputs(self, name, net=None, rou=None, add=None, gui=None):
+    def _inputs(self, net=None, rou=None, add=None, gui=None):
         inp = E("input")
-        if net is not False:
-            if net is None:
-                inp.append(E("net-file", value="%s.net.xml" % name))
-            else:
-                inp.append(E("net-file", value=net))
-        if rou is not False:
-            if rou is None:
-                inp.append(E("route-files", value="%s.rou.xml" % name))
-            else:
-                inp.append(E("route-files", value=rou))
-        if add is not False:
-            if add is None:
-                inp.append(E("additional-files", value="%s.add.xml" % name))
-            else:
-                inp.append(E("additional-files", value=add))
-        if gui is not False:
-            if gui is None:
-                inp.append(E("gui-settings-file", value="%s.gui.xml" % name))
-            else:
-                inp.append(E("gui-settings-file", value=gui))
+        inp.append(E("net-file", value=net))
+        inp.append(E("route-files", value=rou))
+        inp.append(E("additional-files", value=add))
+        inp.append(E("gui-settings-file", value=gui))
         return inp
 
     def _import_edges_from_net(self):
