@@ -1028,9 +1028,6 @@ class Scenario(Serializable):
             traffic light information, used to determine which nodes are
             treated as traffic lights
         """
-        start_time = 0
-        end_time = None
-
         # specify routes vehicles can take
         self.rts = self.specify_routes(net_params)
 
@@ -1135,9 +1132,7 @@ class Scenario(Serializable):
                 rou=self.roufn,
                 gui=self.guifn))
         t = E("time")
-        t.append(E("begin", value=repr(start_time)))
-        if end_time:
-            t.append(E("end", value=repr(end_time)))
+        t.append(E("begin", value=repr(0)))
         cfg.append(t)
 
         printxml(cfg, self.cfg_path + self.sumfn)
