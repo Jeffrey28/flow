@@ -1,6 +1,6 @@
-"""Used as an example of sugiyama experiment.
+"""Double ring version of sugiyama experiment.
 
-This example consists of 22 IDM cars on a ring creating shockwaves.
+This example consists of 41 IDM cars on a double ring creating shockwaves.
 """
 
 from flow.controllers import IDMController, ContinuousRouter
@@ -15,7 +15,7 @@ from flow.envs.loop.lane_changing import LaneChangeAccelEnv, \
 
 def example(render=None):
     """
-    Perform a simulation of vehicles on a ring road.
+    Perform a simulation of vehicles on a double ring road.
 
     Parameters
     ----------
@@ -42,14 +42,18 @@ def example(render=None):
         acceleration_controller=(IDMController, {}),
         sumo_lc_params=lane_change_params,  # enables lane changing
         routing_controller=(ContinuousRouter, {}),
-        num_vehicles=45)
+        num_vehicles=41)
 
     env_params = EnvParams(additional_params=ADDITIONAL_ENV_PARAMS)
 
-    additional_net_params = ADDITIONAL_NET_PARAMS.copy()
-    # Change to 2 lanes for double ring
-    additional_net_params["lanes"] = 2
-    net_params = NetParams(additional_params=additional_net_params)
+    net_params = NetParams(
+        additional_params={
+            "length": 260,
+            "lanes": 2,  # double ring
+            "speed_limit": 30,
+            "resolution": 40,
+        }
+    )
 
     # Vehicle initial placement: random positions
     initial_config = InitialConfig(bunching=20, spacing="random")
