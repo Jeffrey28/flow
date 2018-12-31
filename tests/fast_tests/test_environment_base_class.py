@@ -2,7 +2,7 @@ import unittest
 
 from flow.core.params import SumoParams, EnvParams, InitialConfig, \
     NetParams, SumoCarFollowingParams
-from flow.core.vehicles import Vehicles
+from flow.core.params import VehicleParams
 
 from flow.controllers.routing_controllers import ContinuousRouter
 from flow.controllers.car_following_models import IDMController
@@ -35,7 +35,7 @@ class TestStartingPositionShuffle(unittest.TestCase):
             additional_params=ADDITIONAL_ENV_PARAMS)
 
         # place 5 vehicles in the network (we need at least more than 1)
-        vehicles = Vehicles()
+        vehicles = VehicleParams()
         vehicles.add(
             veh_id="test",
             acceleration_controller=(IDMController, {}),
@@ -92,7 +92,7 @@ class TestVehicleArrangementShuffle(unittest.TestCase):
             additional_params=ADDITIONAL_ENV_PARAMS)
 
         # place 5 vehicles in the network (we need at least more than 1)
-        vehicles = Vehicles()
+        vehicles = VehicleParams()
         vehicles.add(
             veh_id="test",
             acceleration_controller=(IDMController, {}),
@@ -136,11 +136,11 @@ class TestEmissionPath(unittest.TestCase):
     """
 
     def setUp(self):
-        # set sumo_params to default
-        sumo_params = SumoParams()
+        # set sim_params to default
+        sim_params = SumoParams()
 
         # create the environment and scenario classes for a ring road
-        self.env, scenario = ring_road_exp_setup(sumo_params=sumo_params)
+        self.env, scenario = ring_road_exp_setup(sim_params=sim_params)
 
     def tearDown(self):
         # terminate the traci instance
@@ -150,7 +150,7 @@ class TestEmissionPath(unittest.TestCase):
         self.env = None
 
     def test_emission(self):
-        self.assertIsNone(self.env.sumo_params.emission_path)
+        self.assertIsNone(self.env.sim_params.emission_path)
 
 
 class TestApplyingActionsWithSumo(unittest.TestCase):
@@ -175,12 +175,12 @@ class TestApplyingActionsWithSumo(unittest.TestCase):
             additional_params=ADDITIONAL_ENV_PARAMS)
 
         # place 5 vehicles in the network (we need at least more than 1)
-        vehicles = Vehicles()
+        vehicles = VehicleParams()
         vehicles.add(
             veh_id="test",
             acceleration_controller=(IDMController, {}),
             routing_controller=(ContinuousRouter, {}),
-            sumo_car_following_params=SumoCarFollowingParams(
+            car_following_params=SumoCarFollowingParams(
                 accel=1000, decel=1000),
             num_vehicles=5)
 
@@ -331,7 +331,7 @@ class TestSorting(unittest.TestCase):
         env_params = EnvParams(
             additional_params=additional_env_params, sort_vehicles=True)
         initial_config = InitialConfig(shuffle=True)
-        vehicles = Vehicles()
+        vehicles = VehicleParams()
         vehicles.add(veh_id="test", num_vehicles=5)
         self.env, scenario = ring_road_exp_setup(
             env_params=env_params,
@@ -355,7 +355,7 @@ class TestSorting(unittest.TestCase):
         env_params = EnvParams(
             additional_params=additional_env_params, sort_vehicles=True)
         initial_config = InitialConfig(shuffle=True)
-        vehicles = Vehicles()
+        vehicles = VehicleParams()
         vehicles.add(veh_id="test", num_vehicles=5)
         self.env, scenario = ring_road_exp_setup(
             env_params=env_params,
@@ -430,9 +430,9 @@ class TestAbstractMethods(unittest.TestCase):
 
     def setUp(self):
         env, scenario = ring_road_exp_setup()
-        sumo_params = SumoParams()
+        sim_params = SumoParams()  # FIXME: make ambiguous
         env_params = EnvParams()
-        self.env = Env(sumo_params=sumo_params,
+        self.env = Env(sim_params=sim_params,
                        env_params=env_params,
                        scenario=scenario)
 
@@ -470,7 +470,7 @@ class TestAbstractMethods(unittest.TestCase):
 class TestVehicleColoring(unittest.TestCase):
 
     def test_all(self):
-        vehicles = Vehicles()
+        vehicles = VehicleParams()
         vehicles.add("human", num_vehicles=10)
         # add an RL vehicle to ensure that its color will be distinct
         vehicles.add("rl", acceleration_controller=(RLController, {}),
@@ -479,9 +479,9 @@ class TestVehicleColoring(unittest.TestCase):
 
         # we will use the generic environment to ensure this applies to all
         # environments
-        sumo_params = SumoParams()
+        sim_params = SumoParams()
         env_params = EnvParams()
-        env = Env(sumo_params=sumo_params,
+        env = Env(sim_params=sim_params,
                   env_params=env_params,
                   scenario=scenario)
 
@@ -499,7 +499,7 @@ class TestVehicleColoring(unittest.TestCase):
                 env.traci_connection.vehicle.getColor(veh_id), WHITE)
 
         # a little hack to ensure the colors change
-        env.sumo_params.render = True
+        env.sim_params.render = True
 
         # set one vehicle as observed
         env.vehicles.set_observed("human_0")
