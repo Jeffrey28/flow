@@ -37,7 +37,7 @@ vehicles.add(
     }),
     sumo_lc_params=lane_change_params,  # enables lane changing
     routing_controller=(ContinuousRouter, {}),
-    num_vehicles=41)
+    num_vehicles=43)
 vehicles.add(
     veh_id="rl",
     acceleration_controller=(RLController, {}),
