@@ -7,7 +7,7 @@ vehicles in a variable length ring road.
 import json
 
 import ray
-from ray.rllib.agents.agent import get_agent_class
+from ray.rllib.agents.ppo import ppo
 from ray.tune import run_experiments
 from ray.tune.registry import register_env
 
@@ -97,8 +97,7 @@ def setup_exps():
 
     alg_run = "PPO"
 
-    agent_cls = get_agent_class(alg_run)
-    config = agent_cls._default_config.copy()
+    config = ppo.DEFAULT_CONFIG.copy()
     config["num_workers"] = N_CPUS
     config["train_batch_size"] = HORIZON * N_ROLLOUTS
     config["gamma"] = 0.999  # discount rate
