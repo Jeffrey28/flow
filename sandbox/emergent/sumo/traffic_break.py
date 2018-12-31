@@ -7,7 +7,7 @@ from flow.controllers import IDMController, ContinuousRouter, RLController
 from flow.core.experiment import Experiment
 from flow.core.params import SumoParams, EnvParams, \
     InitialConfig, NetParams, SumoLaneChangeParams
-from flow.core.vehicles import Vehicles
+from flow.core.params import VehicleParams
 from flow.scenarios.loop import LoopScenario, ADDITIONAL_NET_PARAMS
 from flow.envs.loop.lane_changing import LaneChangeAccelPOEnv, \
     ADDITIONAL_ENV_PARAMS
@@ -33,14 +33,14 @@ def example(render=None):
     if render is not None:
         sumo_params.render = render
 
-    vehicles = Vehicles()
+    vehicles = VehicleParams()
     # Permit lane changing of human drivers
     lane_change_params = SumoLaneChangeParams(
         lane_change_mode="strategic")
     vehicles.add(
         veh_id="idm",
         acceleration_controller=(IDMController, {}),
-        sumo_lc_params=lane_change_params,  # enables lane changing
+        lane_change_params=lane_change_params,  # enables lane changing
         routing_controller=(ContinuousRouter, {}),
         num_vehicles=43)
     vehicles.add(

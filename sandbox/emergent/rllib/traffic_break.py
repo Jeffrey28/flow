@@ -15,7 +15,7 @@ from flow.utils.registry import make_create_env
 from flow.utils.rllib import FlowParamsEncoder
 from flow.core.params import SumoParams, EnvParams, InitialConfig, NetParams
 from flow.core.params import SumoLaneChangeParams
-from flow.core.vehicles import Vehicles
+from flow.core.params import VehicleParams
 from flow.controllers import RLController, IDMController, ContinuousRouter
 
 # time horizon of a single rollout
@@ -26,7 +26,7 @@ N_ROLLOUTS = 3
 N_CPUS = 2
 
 # We place one autonomous vehicle and 22 human-driven vehicles in the network
-vehicles = Vehicles()
+vehicles = VehicleParams()
 # Permit lane changing of human drivers
 lane_change_params = SumoLaneChangeParams(
     lane_change_mode="strategic")
@@ -35,7 +35,7 @@ vehicles.add(
     acceleration_controller=(IDMController, {
         "noise": 0.2
     }),
-    sumo_lc_params=lane_change_params,  # enables lane changing
+    lane_change_params=lane_change_params,  # enables lane changing
     routing_controller=(ContinuousRouter, {}),
     num_vehicles=43)
 vehicles.add(
@@ -55,7 +55,7 @@ flow_params = dict(
     scenario="LoopScenario",
 
     # sumo-related parameters (see flow.core.params.SumoParams)
-    sumo=SumoParams(
+    sim=SumoParams(
         sim_step=0.1,
         render=False,
     ),
