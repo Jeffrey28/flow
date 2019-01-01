@@ -67,7 +67,7 @@ flow_params = dict(
         additional_params={
             "max_accel": 1,
             "max_decel": 1,
-            "ring_length": [260, 260],
+            "ring_length": [220, 270],
             "lane_change_duration": 0,
             "target_velocity": 30,
         },
