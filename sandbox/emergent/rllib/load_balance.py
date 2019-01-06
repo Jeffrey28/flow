@@ -70,6 +70,7 @@ flow_params = dict(
             "ring_length": [260, 260],
             "lane_change_duration": 1,
             "target_velocity": 30,
+            "sort_vehicles": True,
         },
     ),
 

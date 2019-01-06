@@ -22,7 +22,7 @@ class TestVisualizerRLlib(unittest.TestCase):
         # current path
         current_path = os.path.realpath(__file__).rsplit('/', 1)[0]
 
-        # run the experiment and check it doesn't crash
+        # run the visualizer and check it doesn't crash
         arg_str = '{}/../data/rllib_data/single_agent 1 --num-rollouts 1 ' \
                   '--render_mode no_render ' \
                   '--horizon 10'.format(current_path).split()
@@ -40,7 +40,7 @@ class TestVisualizerRLlib(unittest.TestCase):
         # current path
         current_path = os.path.realpath(__file__).rsplit('/', 1)[0]
 
-        # run the experiment and check it doesn't crash
+        # run the visualizer and check it doesn't crash
         arg_str = '{}/../data/rllib_data/multi_agent 1 --num-rollouts 1 ' \
                   '--render_mode no_render ' \
                   '--horizon 10'.format(current_path).split()
